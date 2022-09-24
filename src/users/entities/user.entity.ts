@@ -20,6 +20,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  avatarUrl: string;
+
   @ManyToOne(() => Group, (group) => group.users)
   group: Group;
 

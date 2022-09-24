@@ -6,12 +6,15 @@ import { Group } from 'src/groups/entities/group.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
+  Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+@Entity()
 export class Event {
   @PrimaryGeneratedColumn()
   id: string;
@@ -34,9 +37,11 @@ export class Event {
   dateEnd: Date;
 
   @ManyToMany(() => Group, (group) => group.events)
+  @JoinTable()
   groups: Group[];
 
   @ManyToMany(() => EventTag, (tag) => tag.events)
+  @JoinTable()
   tags: EventTag[];
 
   @OneToMany(() => EventsImage, (images) => images.event)
@@ -46,9 +51,11 @@ export class Event {
   days: EventDay[];
 
   @ManyToMany(() => User, (user) => user.eventsToVisit)
+  @JoinTable()
   peopleWillCome: User[];
 
   @ManyToMany(() => User, (user) => user.eventsVisited)
+  @JoinTable()
   peopleCame: User[];
 
   @OneToMany(() => EventReview, (review) => review.event)
