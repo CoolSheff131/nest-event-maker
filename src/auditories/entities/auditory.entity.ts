@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { EventDay } from 'src/event-days/entities/event-day.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Auditory {
@@ -7,4 +8,7 @@ export class Auditory {
 
   @Column()
   name: string;
+
+  @OneToMany(() => EventDay, (eventDay) => eventDay.auditory)
+  eventDays: EventDay[];
 }

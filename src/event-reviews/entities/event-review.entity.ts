@@ -1,3 +1,5 @@
+import { EventsReviewsImage } from 'src/events-reviews-images/entities/events-reviews-image.entity';
+import { Event } from 'src/events/entities/event.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -11,12 +13,18 @@ export class EventReview {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @ManyToOne()
+  @ManyToOne(() => User, (user) => user.reviews)
   reviewer: User;
 
   @Column()
   text: string;
 
-  @OneToMany()
-  images?: string[];
+  @OneToMany(
+    () => EventsReviewsImage,
+    (eventReviewImage) => eventReviewImage.eventReview,
+  )
+  images?: EventsReviewsImage[];
+
+  @ManyToOne(() => Event, (event) => event.reviews)
+  event: Event;
 }

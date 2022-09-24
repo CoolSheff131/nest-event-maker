@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from 'src/events/entities/event.entity';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Group {
@@ -7,4 +15,10 @@ export class Group {
 
   @Column()
   name: string;
+
+  @OneToMany(() => User, (user) => user.group)
+  users: User[];
+
+  @ManyToMany(() => Event, (event) => event.groups)
+  events: Event[];
 }

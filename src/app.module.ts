@@ -10,9 +10,12 @@ import { EventTagsModule } from './event-tags/event-tags.module';
 import { EventReviewsModule } from './event-reviews/event-reviews.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
+import { EventsImagesModule } from './events-images/events-images.module';
+import { ReviewsImagesModule } from './reviews-images/reviews-images.module';
+import { EventsReviewsImagesModule } from './events-reviews-images/events-reviews-images.module';
 
 @Module({
-  imports: [EventsModule, AuditoriesModule, EventaysModule, EventDaysModule, EventReviewModule, EventTagsModule, EventReviewsModule, GroupsModule, UsersModule],
+  imports: [EventsModule, AuditoriesModule, EventaysModule, EventDaysModule, EventReviewModule, EventTagsModule, EventReviewsModule, GroupsModule, UsersModule, EventsImagesModule, ReviewsImagesModule, EventsReviewsImagesModule],
   controllers: [AppController],
   providers: [AppService],
 })
