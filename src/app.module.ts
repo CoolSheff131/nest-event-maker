@@ -20,6 +20,7 @@ import { Group } from './groups/entities/group.entity';
 import { EventReview } from './event-reviews/entities/event-review.entity';
 import { EventsReviewsImage } from './events-reviews-images/entities/events-reviews-image.entity';
 import { EventsImage } from './events-images/entities/events-image.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { EventsImage } from './events-images/entities/events-image.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
