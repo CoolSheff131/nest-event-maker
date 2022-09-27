@@ -8,17 +8,16 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class AuthService {
   async register(createUserDto: CreateUserDto) {
-    const { password, ...userEntity } = await this.usersService.create({
+    const { password, ...userData } = await this.usersService.create({
       login: createUserDto.login,
       email: createUserDto.email,
       name: createUserDto.name,
       password: createUserDto.password,
     });
-    console.log(userEntity);
-    const payload = { username: userEntity.login, sub: userEntity.name };
+    const payload = { username: userData.login, sub: userData.name };
     return {
-      access_token: this.jwtService.sign(payload),
-      ...userEntity,
+      accessToken: this.jwtService.sign(payload),
+      userData,
     };
   }
   constructor(
@@ -29,16 +28,17 @@ export class AuthService {
   async validateUser(login: string, password: string): Promise<UserDto> | null {
     const user = await this.usersService.findOneByLogin(login);
     if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
+      const { password, ...userData } = user;
+      return userData;
     }
     return null;
   }
 
   async login(user: SignInUserDto) {
-    const payload = { username: user.login, sub: user.password };
+    const { password, ...userData } = user;
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(userData),
+      userData,
     };
   }
 }
