@@ -12,6 +12,8 @@ export class UserDto {
 
   avatarUrl: string;
 
+  role: 'student' | 'admin';
+
   group: Group;
 
   events: Event[];

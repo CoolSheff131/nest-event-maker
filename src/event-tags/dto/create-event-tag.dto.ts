@@ -1,1 +1,3 @@
-export class CreateEventTagDto {}
+export class CreateEventTagDto {
+  name: string;
+}

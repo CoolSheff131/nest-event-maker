@@ -21,9 +21,12 @@ import { EventReview } from './event-reviews/entities/event-review.entity';
 import { EventsReviewsImage } from './events-reviews-images/entities/events-reviews-image.entity';
 import { EventsImage } from './events-images/entities/events-image.entity';
 import { AuthModule } from './auth/auth.module';
+import { UserRolesModule } from './user-roles/user-roles.module';
 
 @Module({
   imports: [
+    UserRolesModule,
+
     EventsModule,
     AuditoriesModule,
     EventDaysModule,

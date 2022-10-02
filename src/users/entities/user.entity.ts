@@ -1,6 +1,7 @@
 import { EventReview } from 'src/event-reviews/entities/event-review.entity';
 import { Event } from 'src/events/entities/event.entity';
 import { Group } from 'src/groups/entities/group.entity';
+import { UserRole } from 'src/user-roles/entities/userRole.entity';
 import {
   Column,
   Entity,
@@ -28,6 +29,9 @@ export class User {
 
   @Column()
   avatarUrl: string;
+
+  @ManyToOne(() => UserRole, (userRole) => userRole.users)
+  role: UserRole;
 
   @ManyToOne(() => Group, (group) => group.users)
   group: Group;

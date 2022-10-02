@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateEventTagDto } from './dto/create-event-tag.dto';
 import { UpdateEventTagDto } from './dto/update-event-tag.dto';
+import { EventTag } from './entities/event-tag.entity';
 
 @Injectable()
 export class EventTagsService {
-  create(createEventTagDto: CreateEventTagDto) {
-    return 'This action adds a new eventTag';
+  constructor(
+    @InjectRepository(EventTag)
+    private readonly eventTagsRepository: Repository<EventTag>,
+  ) {}
+
+  async create(createEventTagDto: CreateEventTagDto) {
+    return await this.eventTagsRepository.save({
+      name: createEventTagDto.name,
+    });
   }
 
-  findAll() {
-    return `This action returns all eventTags`;
+  async findAll() {
+    return await this.eventTagsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} eventTag`;
+  async findOne(id: string) {
+    return await this.eventTagsRepository.findOneBy({ id });
   }
 
-  update(id: number, updateEventTagDto: UpdateEventTagDto) {
-    return `This action updates a #${id} eventTag`;
+  async update(id: string, updateEventTagDto: UpdateEventTagDto) {
+    return await this.eventTagsRepository.update(id, {
+      name: updateEventTagDto.name,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} eventTag`;
+  async remove(id: string) {
+    return await this.eventTagsRepository.delete(id);
   }
 }

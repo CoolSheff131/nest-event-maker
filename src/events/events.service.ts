@@ -1,10 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEventDto } from './dto/create-event.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateEventDTO } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
-  create(createEventDto: CreateEventDto) {
+  constructor(
+    @InjectRepository(Event)
+    private eventRepository: Repository<Event>,
+  ) {}
+
+  create(createEventDto: CreateEventDTO) {
+    this.eventRepository.save({
+      dateEnd: createEventDto.dateEnd,
+      dateStart: createEventDto.dateStart,
+      description: createEventDto.description,
+      title: createEventDto.title,
+      days: createEventDto.days,
+      groups: createEventDto.groups,
+    });
     return 'This action adds a new event';
   }
 

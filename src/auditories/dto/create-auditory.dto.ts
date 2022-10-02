@@ -1,1 +1,3 @@
-export class CreateAuditoryDto {}
+export class CreateAuditoryDto {
+  auditoryName: string;
+}

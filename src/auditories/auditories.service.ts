@@ -1,19 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateAuditoryDto } from './dto/create-auditory.dto';
 import { UpdateAuditoryDto } from './dto/update-auditory.dto';
+import { Auditory } from './entities/auditory.entity';
 
 @Injectable()
 export class AuditoriesService {
-  create(createAuditoryDto: CreateAuditoryDto) {
-    return 'This action adds a new auditory';
+  constructor(
+    @InjectRepository(Auditory)
+    private readonly auditoryRepository: Repository<Auditory>,
+  ) {}
+
+  async create(createAuditoryDto: CreateAuditoryDto) {
+    const createdAuditory = await this.auditoryRepository.save({
+      name: createAuditoryDto.auditoryName,
+    });
+    return createdAuditory;
   }
 
-  findAll() {
-    return `This action returns all auditories`;
+  async findAll() {
+    return await this.auditoryRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auditory`;
+  async findOne(id: string) {
+    return await this.auditoryRepository.findOneBy({ id });
   }
 
   update(id: number, updateAuditoryDto: UpdateAuditoryDto) {

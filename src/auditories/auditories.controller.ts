@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AuditoriesService } from './auditories.service';
 import { CreateAuditoryDto } from './dto/create-auditory.dto';
 import { UpdateAuditoryDto } from './dto/update-auditory.dto';
@@ -19,11 +27,14 @@ export class AuditoriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.auditoriesService.findOne(+id);
+    return this.auditoriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuditoryDto: UpdateAuditoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAuditoryDto: UpdateAuditoryDto,
+  ) {
     return this.auditoriesService.update(+id, updateAuditoryDto);
   }
 

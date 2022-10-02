@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateEventsImageDto } from './dto/create-events-image.dto';
 import { UpdateEventsImageDto } from './dto/update-events-image.dto';
+import { EventsImage } from './entities/events-image.entity';
 
 @Injectable()
 export class EventsImagesService {
+  constructor(
+    @InjectRepository(EventsImage)
+    private eventImageRepository: Repository<EventsImage>,
+  ) {}
+
   create(createEventsImageDto: CreateEventsImageDto) {
-    return 'This action adds a new eventsImage';
+    // this.eventRepository.save({
+    //   url: createEventsImageDto
+    // })
+    return;
   }
 
   findAll() {
