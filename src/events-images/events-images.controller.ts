@@ -1,16 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { EventsImagesService } from './events-images.service';
-import { CreateEventsImageDto } from './dto/create-events-image.dto';
 import { UpdateEventsImageDto } from './dto/update-events-image.dto';
 
 @Controller('events-images')
 export class EventsImagesController {
   constructor(private readonly eventsImagesService: EventsImagesService) {}
-
-  @Post()
-  create(@Body() createEventsImageDto: CreateEventsImageDto) {
-    return this.eventsImagesService.create(createEventsImageDto);
-  }
 
   @Get()
   findAll() {
@@ -23,7 +25,10 @@ export class EventsImagesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventsImageDto: UpdateEventsImageDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateEventsImageDto: UpdateEventsImageDto,
+  ) {
     return this.eventsImagesService.update(+id, updateEventsImageDto);
   }
 

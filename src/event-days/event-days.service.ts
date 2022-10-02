@@ -13,8 +13,12 @@ export class EventDaysService {
     private readonly eventRepository: Repository<EventDay>,
   ) {}
 
-  create(createEventDayDto: CreateEventDayDto) {
-    return 'This action adds a new eventDay';
+  async create(createEventDayDto: CreateEventDayDto) {
+    return await this.eventRepository.save({
+      auditory: createEventDayDto.auditory,
+      day: createEventDayDto.day,
+      timeStart: createEventDayDto.timeStart,
+    });
   }
 
   findAll() {

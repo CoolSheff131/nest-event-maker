@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EventDay } from 'src/event-days/entities/event-day.entity';
+import { EventDaysService } from 'src/event-days/event-days.service';
+import { EventsImage } from 'src/events-images/entities/events-image.entity';
+import { EventsImagesService } from 'src/events-images/events-images.service';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateEventDTO } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -10,22 +15,43 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
+    private readonly eventImagesService: EventsImagesService,
+    private readonly eventDayService: EventDaysService,
+    private readonly userService: UsersService,
   ) {}
 
-  create(createEventDto: CreateEventDTO) {
-    this.eventRepository.save({
-      dateEnd: createEventDto.dateEnd,
-      dateStart: createEventDto.dateStart,
+  async create(
+    images: Array<Express.Multer.File>,
+    createEventDto: CreateEventDTO,
+  ) {
+    const imageEntities: EventsImage[] = [];
+    for (let image of images) {
+      const imageEntity = await this.eventImagesService.create(image);
+
+      imageEntities.push(imageEntity);
+    }
+    const dayEntities: EventDay[] = [];
+    for (let day of createEventDto.days) {
+      const dayEntity = await this.eventDayService.create(day);
+      dayEntities.push(dayEntity);
+    }
+    const owner = await this.userService.findOneById(createEventDto.owner.id);
+
+    return await this.eventRepository.save({
+      owner: owner,
+      places: createEventDto.places,
+      tags: createEventDto.tags,
+
+      images: imageEntities,
       description: createEventDto.description,
       title: createEventDto.title,
-      days: createEventDto.days,
+      days: dayEntities,
       groups: createEventDto.groups,
     });
-    return 'This action adds a new event';
   }
 
   findAll() {
-    return `This action returns all events`;
+    return this.eventRepository.find();
   }
 
   findOne(id: number) {

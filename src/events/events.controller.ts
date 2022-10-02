@@ -6,18 +6,55 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFiles,
+  UseInterceptors,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { CreateEventDTO } from './dto/create-event.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname, join } from 'path';
+import { createReadStream } from 'fs';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDTO) {
-    return this.eventsService.create(createEventDto);
+  @UseInterceptors(
+    FilesInterceptor('images[]', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          // Generating a 32 random chars long string
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          //Calling the callback passing the random name generated with the original extension name
+          cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  create(
+    @UploadedFiles() images: Array<Express.Multer.File>,
+    @Body() createEventDto: CreateEventDTO,
+  ) {
+    return this.eventsService.create(images, createEventDto);
+  }
+
+  @Get('image/:imagename')
+  getFile(@Param('imagename') imagename, @Res() res: any) {
+    return res.sendFile(
+      join(
+        process.cwd(),
+        'uploads/' + '9410f7a0263ccc19a610c735aee3362754.jpg',
+      ),
+    );
   }
 
   @Get()

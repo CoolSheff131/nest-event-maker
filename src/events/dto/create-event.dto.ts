@@ -1,3 +1,4 @@
+import { CreateEventDayDto } from 'src/event-days/dto/create-event-day.dto';
 import { EventDay } from 'src/event-days/entities/event-day.entity';
 import { EventReview } from 'src/event-reviews/entities/event-review.entity';
 import { EventTag } from 'src/event-tags/entities/event-tag.entity';
@@ -10,13 +11,7 @@ export interface CreateEventDTO {
   description: string;
   owner: User;
   places: number;
-  dateStart: Date;
-  dateEnd: Date;
   groups: Group[];
   tags: EventTag[];
-  images: string[];
-  days: EventDay[];
-  peopleWillCome?: User[];
-  peopleCame?: User[];
-  reviews?: EventReview[];
+  days: CreateEventDayDto[];
 }

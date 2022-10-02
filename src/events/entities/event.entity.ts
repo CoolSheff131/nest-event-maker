@@ -31,11 +31,6 @@ export class Event {
   @Column()
   places: number;
 
-  @Column()
-  dateStart: Date;
-  @Column()
-  dateEnd: Date;
-
   @ManyToMany(() => Group, (group) => group.events)
   @JoinTable()
   groups: Group[];

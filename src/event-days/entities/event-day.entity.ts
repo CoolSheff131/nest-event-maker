@@ -10,6 +10,9 @@ export class EventDay {
   @Column()
   timeStart: string;
 
+  @Column()
+  day: Date;
+
   @ManyToOne(() => Auditory, (auditory) => auditory.eventDays)
   auditory: Auditory;
 

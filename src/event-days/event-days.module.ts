@@ -9,5 +9,6 @@ import { Event } from 'src/events/entities/event.entity';
   imports: [TypeOrmModule.forFeature([EventDay, Event])],
   controllers: [EventDaysController],
   providers: [EventDaysService],
+  exports: [EventDaysService],
 })
 export class EventDaysModule {}
