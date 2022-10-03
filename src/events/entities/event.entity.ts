@@ -39,10 +39,14 @@ export class Event {
   @JoinTable()
   tags: EventTag[];
 
-  @OneToMany(() => EventsImage, (images) => images.event)
+  @OneToMany(() => EventsImage, (images) => images.event, {
+    onDelete: 'CASCADE',
+  })
   images: EventsImage[];
 
-  @OneToMany(() => EventDay, (eventDay) => eventDay.event)
+  @OneToMany(() => EventDay, (eventDay) => eventDay.event, {
+    onDelete: 'CASCADE',
+  })
   days: EventDay[];
 
   @ManyToMany(() => User, (user) => user.eventsToVisit)
@@ -53,6 +57,8 @@ export class Event {
   @JoinTable()
   peopleCame: User[];
 
-  @OneToMany(() => EventReview, (review) => review.event)
+  @OneToMany(() => EventReview, (review) => review.event, {
+    onDelete: 'CASCADE',
+  })
   reviews: EventReview[];
 }

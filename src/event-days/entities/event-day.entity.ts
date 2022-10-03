@@ -16,6 +16,8 @@ export class EventDay {
   @ManyToOne(() => Auditory, (auditory) => auditory.eventDays)
   auditory: Auditory;
 
-  @ManyToOne(() => Event, (event) => event.days)
+  @ManyToOne(() => Event, (event) => event.days, {
+    onDelete: 'CASCADE',
+  })
   event: Event;
 }

@@ -9,6 +9,8 @@ export class EventsImage {
   @Column()
   url: string;
 
-  @ManyToOne(() => Event, (event) => event.images)
+  @ManyToOne(() => Event, (event) => event.images, {
+    onDelete: 'CASCADE',
+  })
   event: Event;
 }

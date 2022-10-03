@@ -50,19 +50,30 @@ export class EventsService {
     });
   }
 
-  findAll() {
-    return this.eventRepository.find();
+  async findAll() {
+    return await this.eventRepository.find({
+      relations: [
+        'owner',
+        'groups',
+        'tags',
+        'images',
+        'days',
+        'peopleWillCome',
+        'peopleCame',
+        'reviews',
+      ],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} event`;
+  async findOne(id: string) {
+    return await this.eventRepository.findOneBy({ id });
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {
     return `This action updates a #${id} event`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  async remove(id: string) {
+    return await this.eventRepository.delete(id);
   }
 }
