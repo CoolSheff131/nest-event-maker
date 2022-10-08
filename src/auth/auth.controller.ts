@@ -18,7 +18,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('user')
   async getUser(@Request() req) {
-    return req.user;
+    return { ...req.user, role: req.user.role.role };
   }
 
   @UseGuards(LocalAuthGuard)
