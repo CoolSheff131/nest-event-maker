@@ -14,7 +14,7 @@ export class EventsImagesService {
 
   async create(createEventsImageDto: Express.Multer.File) {
     return await this.eventImageRepository.save({
-      url: `localhost:3000/events/image/${createEventsImageDto.filename}`,
+      url: `http://localhost:3000/events/image/${createEventsImageDto.filename}`,
     });
   }
 

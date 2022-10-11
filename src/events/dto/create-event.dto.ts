@@ -6,7 +6,6 @@ import { Group } from 'src/groups/entities/group.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export interface CreateEventDTO {
-  id: string;
   title: string;
   description: string;
   owner: User;

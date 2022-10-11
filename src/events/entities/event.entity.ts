@@ -31,11 +31,11 @@ export class Event {
   @Column()
   places: number;
 
-  @ManyToMany(() => Group, (group) => group.events)
+  @ManyToMany(() => Group, (group) => group.events, { cascade: true })
   @JoinTable()
   groups: Group[];
 
-  @ManyToMany(() => EventTag, (tag) => tag.events)
+  @ManyToMany(() => EventTag, (tag) => tag.events, { cascade: true })
   @JoinTable()
   tags: EventTag[];
 
@@ -49,11 +49,11 @@ export class Event {
   })
   days: EventDay[];
 
-  @ManyToMany(() => User, (user) => user.eventsToVisit)
+  @ManyToMany(() => User, (user) => user.eventsToVisit, { cascade: true })
   @JoinTable()
   peopleWillCome: User[];
 
-  @ManyToMany(() => User, (user) => user.eventsVisited)
+  @ManyToMany(() => User, (user) => user.eventsVisited, { cascade: true })
   @JoinTable()
   peopleCame: User[];
 
