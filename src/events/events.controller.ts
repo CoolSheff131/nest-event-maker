@@ -49,12 +49,7 @@ export class EventsController {
 
   @Get('image/:imagename')
   getFile(@Param('imagename') imagename, @Res() res: any) {
-    return res.sendFile(
-      join(
-        process.cwd(),
-        'uploads/' + '9410f7a0263ccc19a610c735aee3362754.jpg',
-      ),
-    );
+    return res.sendFile(join(process.cwd(), 'uploads/' + imagename));
   }
 
   @Get()
@@ -68,8 +63,28 @@ export class EventsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventsService.update(+id, updateEventDto);
+  @UseInterceptors(
+    FilesInterceptor('images[]', 10, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          // Generating a 32 random chars long string
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          //Calling the callback passing the random name generated with the original extension name
+          cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  update(
+    @UploadedFiles() images: Array<Express.Multer.File>,
+    @Param('id') id: string,
+    @Body() updateEventDto: CreateEventDTO,
+  ) {
+    return this.eventsService.update(images, id, updateEventDto);
   }
 
   @Delete(':id')

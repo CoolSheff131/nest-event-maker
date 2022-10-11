@@ -1,7 +1,7 @@
 import { Auditory } from 'src/auditories/entities/auditory.entity';
 
 export class CreateEventDayDto {
-  day: Date;
-  timeStart: string;
+  date: Date;
+
   auditory: Auditory;
 }

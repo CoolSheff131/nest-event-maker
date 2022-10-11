@@ -69,8 +69,35 @@ export class EventsService {
     return await this.eventRepository.findOneBy({ id });
   }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
+  async update(
+    images: Array<Express.Multer.File>,
+    id: string,
+    createEventDto: CreateEventDTO,
+  ) {
+    const imageEntities: EventsImage[] = [];
+    for (let image of images) {
+      const imageEntity = await this.eventImagesService.create(image);
+
+      imageEntities.push(imageEntity);
+    }
+    const dayEntities: EventDay[] = [];
+    for (let day of createEventDto.days) {
+      const dayEntity = await this.eventDayService.create(day);
+      dayEntities.push(dayEntity);
+    }
+    const owner = await this.userService.findOneById(createEventDto.owner.id);
+
+    return await this.eventRepository.update(id, {
+      owner: owner,
+      places: createEventDto.places,
+      tags: createEventDto.tags,
+
+      images: imageEntities,
+      description: createEventDto.description,
+      title: createEventDto.title,
+      days: dayEntities,
+      groups: createEventDto.groups,
+    });
   }
 
   async remove(id: string) {

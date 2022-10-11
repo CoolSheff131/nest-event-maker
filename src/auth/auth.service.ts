@@ -35,7 +35,6 @@ export class AuthService {
     const user = await this.usersService.findOneByLogin(login);
     if (user && user.password === password) {
       const { password, ...userData } = user;
-      console.log(userData);
       return {
         ...userData,
         role: userData.role.role,

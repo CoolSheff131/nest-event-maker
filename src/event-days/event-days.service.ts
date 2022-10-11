@@ -16,24 +16,26 @@ export class EventDaysService {
   async create(createEventDayDto: CreateEventDayDto) {
     return await this.eventRepository.save({
       auditory: createEventDayDto.auditory,
-      day: createEventDayDto.day,
-      timeStart: createEventDayDto.timeStart,
+      date: createEventDayDto.date,
     });
   }
 
-  findAll() {
-    return `This action returns all eventDays`;
+  async findAll() {
+    return await this.eventRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} eventDay`;
+  async findOne(id: string) {
+    return await this.eventRepository.findOneBy({ id });
   }
 
-  update(id: number, updateEventDayDto: UpdateEventDayDto) {
-    return `This action updates a #${id} eventDay`;
+  async update(id: number, updateEventDayDto: UpdateEventDayDto) {
+    return await this.eventRepository.update(id, {
+      auditory: updateEventDayDto.auditory,
+      date: updateEventDayDto.date,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} eventDay`;
+  async remove(id: string) {
+    return await this.eventRepository.delete(id);
   }
 }

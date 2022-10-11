@@ -8,10 +8,7 @@ export class EventDay {
   id: string;
 
   @Column()
-  timeStart: string;
-
-  @Column()
-  day: Date;
+  date: Date;
 
   @ManyToOne(() => Auditory, (auditory) => auditory.eventDays)
   auditory: Auditory;
