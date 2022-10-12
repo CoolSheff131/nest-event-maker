@@ -18,6 +18,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { createReadStream } from 'fs';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Controller('events')
 export class EventsController {
@@ -60,6 +61,11 @@ export class EventsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
+  }
+
+  @Patch('goingToEvent/:id')
+  goingToEvent(@Param('id') id: string, @Body() user: UserDto) {
+    return this.eventsService.goingToEvent(id, user);
   }
 
   @Patch(':id')

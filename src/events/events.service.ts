@@ -6,6 +6,7 @@ import { EventTag } from 'src/event-tags/entities/event-tag.entity';
 import { EventTagsService } from 'src/event-tags/event-tags.service';
 import { EventsImage } from 'src/events-images/entities/events-image.entity';
 import { EventsImagesService } from 'src/events-images/events-images.service';
+import { UserDto } from 'src/users/dto/user.dto';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateEventDTO } from './dto/create-event.dto';
@@ -14,6 +15,25 @@ import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
+  async goingToEvent(id: string, user: UserDto) {
+    const event = await this.eventRepository.findOneBy({ id });
+    if (
+      event.peopleWillCome !== undefined &&
+      event.peopleWillCome.length === event.places
+    ) {
+      return;
+    }
+
+    const userEntity = await this.userService.findOneById(user.id);
+
+    if (event.peopleWillCome !== undefined) {
+      event.peopleWillCome.push(userEntity);
+    } else {
+      event.peopleWillCome = [userEntity];
+    }
+    await this.eventRepository.save(event);
+    return event;
+  }
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
@@ -81,10 +101,14 @@ export class EventsService {
       ],
     });
 
-    return events.map((event) => ({
-      ...event,
-      images: event.images.map((i) => i.url),
-    }));
+    return events
+      .map((event) => ({
+        ...event,
+        images: event.images.map((i) => i.url),
+      }))
+      .sort((a, b) =>
+        a.updatedAt > b.updatedAt ? 1 : a.updatedAt === b.updatedAt ? 0 : -1,
+      );
   }
 
   async findOne(id: string) {
