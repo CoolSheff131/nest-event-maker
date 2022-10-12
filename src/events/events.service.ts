@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventDay } from 'src/event-days/entities/event-day.entity';
 import { EventDaysService } from 'src/event-days/event-days.service';
+import { EventTag } from 'src/event-tags/entities/event-tag.entity';
+import { EventTagsService } from 'src/event-tags/event-tags.service';
 import { EventsImage } from 'src/events-images/entities/events-image.entity';
 import { EventsImagesService } from 'src/events-images/events-images.service';
 import { UsersService } from 'src/users/users.service';
@@ -18,6 +20,7 @@ export class EventsService {
     private readonly eventImagesService: EventsImagesService,
     private readonly eventDayService: EventDaysService,
     private readonly userService: UsersService,
+    private readonly tagService: EventTagsService,
   ) {}
 
   async create(
@@ -89,34 +92,57 @@ export class EventsService {
   }
 
   async update(
-    images: Array<Express.Multer.File>,
+    images: Array<Express.Multer.File> | null,
     id: string,
-    createEventDto: CreateEventDTO,
+    createEventDto: any,
   ) {
-    const imageEntities: EventsImage[] = [];
-    for (let image of images) {
-      const imageEntity = await this.eventImagesService.create(image);
+    console.log(createEventDto);
+    const dto: CreateEventDTO = {
+      days: JSON.parse(createEventDto.days),
+      description: createEventDto.description,
+      groups: JSON.parse(createEventDto.groups),
+      places: +createEventDto.places,
+      title: createEventDto.title,
+      owner: JSON.parse(createEventDto.owner),
 
-      imageEntities.push(imageEntity);
+      tags: JSON.parse(createEventDto.tags),
+    };
+
+    const newImageEntities: EventsImage[] = [];
+    for (let image of images) {
+      const newImageEntity = await this.eventImagesService.create(image);
+
+      newImageEntities.push(newImageEntity);
     }
+    console.log(dto.days);
+
     const dayEntities: EventDay[] = [];
-    for (let day of createEventDto.days) {
+    for (let day of dto.days) {
       const dayEntity = await this.eventDayService.create(day);
       dayEntities.push(dayEntity);
     }
-    const owner = await this.userService.findOneById(createEventDto.owner.id);
 
-    return await this.eventRepository.update(id, {
-      owner: owner,
-      places: createEventDto.places,
-      tags: createEventDto.tags,
+    const tagsEntities: EventTag[] = [];
+    for (let tag of dto.tags) {
+      const tagEntity = await this.tagService.findOne(tag.id);
+      tagsEntities.push(tagEntity);
+    }
+    const owner = await this.userService.findOneById(dto.owner.id);
+    console.log(dto.tags);
+    console.log(tagsEntities);
 
-      images: imageEntities,
-      description: createEventDto.description,
-      title: createEventDto.title,
-      days: dayEntities,
-      groups: createEventDto.groups,
-    });
+    const event = await this.eventRepository.findOneBy({ id });
+
+    event.owner = owner;
+    (event.places = dto.places), (event.tags = tagsEntities);
+
+    event.images = images.length > 0 ? newImageEntities : event.images;
+    event.description = dto.description;
+    event.title = dto.title;
+    event.days = dayEntities;
+    event.groups = dto.groups;
+    this.eventRepository.save(event);
+    return event;
   }
 
   async remove(id: string) {

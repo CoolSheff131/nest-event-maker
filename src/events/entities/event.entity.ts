@@ -35,7 +35,11 @@ export class Event {
   @JoinTable()
   groups: Group[];
 
-  @ManyToMany(() => EventTag, (tag) => tag.events, { cascade: true })
+  @ManyToMany(() => EventTag, (tag) => tag.events, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    cascade: true,
+  })
   @JoinTable()
   tags: EventTag[];
 

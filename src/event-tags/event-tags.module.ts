@@ -8,5 +8,6 @@ import { EventTag } from './entities/event-tag.entity';
   imports: [TypeOrmModule.forFeature([EventTag])],
   controllers: [EventTagsController],
   providers: [EventTagsService],
+  exports: [EventTagsService],
 })
 export class EventTagsModule {}

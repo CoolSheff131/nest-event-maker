@@ -10,7 +10,9 @@ export class EventDay {
   @Column()
   date: Date;
 
-  @ManyToOne(() => Auditory, (auditory) => auditory.eventDays)
+  @ManyToOne(() => Auditory, (auditory) => auditory.eventDays, {
+    eager: true,
+  })
   auditory: Auditory;
 
   @ManyToOne(() => Event, (event) => event.days, {

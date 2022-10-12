@@ -7,11 +7,13 @@ import { EventDay } from 'src/event-days/entities/event-day.entity';
 import { EventsImagesModule } from 'src/events-images/events-images.module';
 import { EventDaysModule } from 'src/event-days/event-days.module';
 import { UsersModule } from 'src/users/users.module';
+import { EventTagsModule } from 'src/event-tags/event-tags.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Event, EventDay]),
     EventsImagesModule,
+    EventTagsModule,
     EventDaysModule,
     UsersModule,
   ],
