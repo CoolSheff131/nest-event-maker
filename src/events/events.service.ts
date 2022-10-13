@@ -15,16 +15,25 @@ import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
+  async findUserEvents(userId: string) {
+    let events = await this.findAll();
+    events = events.filter(
+      (e) =>
+        +e.owner.id === +userId ||
+        e.peopleWillCome.some((u) => +u.id === +userId) ||
+        e.peopleCame.some((u) => +u.id === +userId),
+    );
+
+    return events;
+  }
   async notGoingToEvent(id: string, user: UserDto) {
     const event = await this.eventRepository.findOneBy({ id });
 
     const userEntity = await this.userService.findOneById(user.id);
-    console.log(event.peopleWillCome);
     if (event.peopleWillCome !== undefined) {
       event.peopleWillCome = event.peopleWillCome.filter(
         (u) => u.id !== userEntity.id,
       );
-      console.log(event.peopleWillCome);
 
       await this.eventRepository.save(event);
     }
@@ -135,7 +144,6 @@ export class EventsService {
     id: string,
     createEventDto: any,
   ) {
-    console.log(createEventDto);
     const dto: CreateEventDTO = {
       days: JSON.parse(createEventDto.days),
       description: createEventDto.description,
@@ -153,7 +161,6 @@ export class EventsService {
 
       newImageEntities.push(newImageEntity);
     }
-    console.log(dto.days);
 
     const dayEntities: EventDay[] = [];
     for (let day of dto.days) {
@@ -167,8 +174,6 @@ export class EventsService {
       tagsEntities.push(tagEntity);
     }
     const owner = await this.userService.findOneById(dto.owner.id);
-    console.log(dto.tags);
-    console.log(tagsEntities);
 
     const event = await this.eventRepository.findOneBy({ id });
 
