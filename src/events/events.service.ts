@@ -15,6 +15,21 @@ import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
+  async notGoingToEvent(id: string, user: UserDto) {
+    const event = await this.eventRepository.findOneBy({ id });
+
+    const userEntity = await this.userService.findOneById(user.id);
+    console.log(event.peopleWillCome);
+    if (event.peopleWillCome !== undefined) {
+      event.peopleWillCome = event.peopleWillCome.filter(
+        (u) => u.id !== userEntity.id,
+      );
+      console.log(event.peopleWillCome);
+
+      await this.eventRepository.save(event);
+    }
+    return event;
+  }
   async goingToEvent(id: string, user: UserDto) {
     const event = await this.eventRepository.findOneBy({ id });
     if (

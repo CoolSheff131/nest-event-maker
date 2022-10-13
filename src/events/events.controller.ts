@@ -63,6 +63,10 @@ export class EventsController {
     return this.eventsService.findOne(id);
   }
 
+  @Patch('notGoingToEvent/:id')
+  notGoingToEvent(@Param('id') id: string, @Body() user: UserDto) {
+    return this.eventsService.notGoingToEvent(id, user);
+  }
   @Patch('goingToEvent/:id')
   goingToEvent(@Param('id') id: string, @Body() user: UserDto) {
     return this.eventsService.goingToEvent(id, user);

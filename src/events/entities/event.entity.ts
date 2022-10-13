@@ -33,37 +33,50 @@ export class Event {
   @Column()
   places: number;
 
-  @ManyToMany(() => Group, (group) => group.events, { cascade: true })
+  @ManyToMany(() => Group, (group) => group.events, {
+    eager: true,
+    cascade: true,
+  })
   @JoinTable()
   groups: Group[];
 
   @ManyToMany(() => EventTag, (tag) => tag.events, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    eager: true,
     cascade: true,
   })
   @JoinTable()
   tags: EventTag[];
 
   @OneToMany(() => EventsImage, (images) => images.event, {
+    eager: true,
     onDelete: 'CASCADE',
   })
   images: EventsImage[];
 
   @OneToMany(() => EventDay, (eventDay) => eventDay.event, {
+    eager: true,
     onDelete: 'CASCADE',
   })
   days: EventDay[];
 
-  @ManyToMany(() => User, (user) => user.eventsToVisit, { cascade: true })
+  @ManyToMany(() => User, (user) => user.eventsToVisit, {
+    eager: true,
+    cascade: true,
+  })
   @JoinTable()
   peopleWillCome: User[];
 
-  @ManyToMany(() => User, (user) => user.eventsVisited, { cascade: true })
+  @ManyToMany(() => User, (user) => user.eventsVisited, {
+    eager: true,
+    cascade: true,
+  })
   @JoinTable()
   peopleCame: User[];
 
   @OneToMany(() => EventReview, (review) => review.event, {
+    eager: true,
     onDelete: 'CASCADE',
   })
   reviews: EventReview[];
