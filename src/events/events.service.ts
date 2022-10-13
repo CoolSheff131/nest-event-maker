@@ -15,6 +15,34 @@ import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
+  async removeConfirmPresent(id: string, user: UserDto) {
+    const eventEntity = await this.eventRepository.findOneBy({ id });
+    if (!eventEntity) {
+      return;
+    }
+
+    const userEntity = await this.userService.findOneById(user.id);
+    eventEntity.peopleCame = eventEntity.peopleCame.filter(
+      (u) => +u.id !== +userEntity.id,
+    );
+
+    await this.eventRepository.save(eventEntity);
+
+    return eventEntity;
+  }
+  async confirmPresent(id: string, user: UserDto) {
+    const eventEntity = await this.eventRepository.findOneBy({ id });
+    if (!eventEntity) {
+      return;
+    }
+
+    const userEntity = await this.userService.findOneById(user.id);
+    eventEntity.peopleCame.push(userEntity);
+
+    await this.eventRepository.save(eventEntity);
+
+    return eventEntity;
+  }
   async findUserEvents(userId: string) {
     let events = await this.findAll();
     events = events.filter(
@@ -136,7 +164,11 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    return await this.eventRepository.findOneBy({ id });
+    const event = await this.eventRepository.findOneBy({ id });
+    return {
+      ...event,
+      images: event.images.map((i) => i.url),
+    };
   }
 
   async update(

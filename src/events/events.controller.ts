@@ -58,6 +58,14 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
+  @Patch(':id/remove-confirm-present')
+  removeConfirmPresent(@Param('id') id: string, @Body() user: UserDto) {
+    return this.eventsService.removeConfirmPresent(id, user);
+  }
+  @Patch(':id/confirm-present')
+  confirmPresent(@Param('id') id: string, @Body() user: UserDto) {
+    return this.eventsService.confirmPresent(id, user);
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
