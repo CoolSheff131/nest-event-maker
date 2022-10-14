@@ -16,7 +16,10 @@ export class Group {
   @Column()
   name: string;
 
-  @OneToMany(() => User, (user) => user.group)
+  @OneToMany(() => User, (user) => user.group, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   users: User[];
 
   @ManyToMany(() => Event, (event) => event.groups)

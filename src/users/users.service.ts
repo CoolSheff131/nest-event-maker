@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRolesService } from 'src/user-roles/user-roles.service';
 import { Repository } from 'typeorm';
-import { CreateUserDto, CreateUserStudentDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserStudentDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
@@ -15,9 +15,15 @@ export class UsersService {
     private userRolesService: UserRolesService,
   ) {}
 
-  findAllStudents(): Promise<User[]> {
-    return this.usersRepository.find({
-      where: { role: { role: 'student' } },
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find({
+      relations: ['group'],
+    });
+  }
+
+  async findAllStudents(): Promise<User[]> {
+    return await this.usersRepository.find({
+      where: { role: { name: 'student' } },
       relations: ['group'],
     });
   }
@@ -38,7 +44,9 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const role = await this.userRolesService.findByRole(createUserDto.role);
+    const role = await this.userRolesService.findByName(
+      createUserDto.role.name,
+    );
 
     return await this.usersRepository.save({
       login: createUserDto.login,
@@ -48,8 +56,8 @@ export class UsersService {
       role: role,
     });
   }
-  async createStudent(createUserDto: CreateUserStudentDto) {
-    const role = await this.userRolesService.findByRole('student');
+  async createStudent(createUserDto: CreateUserDto) {
+    const role = await this.userRolesService.findByName('student');
 
     return await this.usersRepository.save({
       group: createUserDto.group,
@@ -61,8 +69,10 @@ export class UsersService {
     });
   }
 
-  async updateStudent(id: string, updateUserDto: UpdateUserStudentDto) {
-    const role = await this.userRolesService.findByRole('student');
+  async updateUser(id: string, updateUserDto: CreateUserDto) {
+    const role = await this.userRolesService.findByName(
+      updateUserDto.role.name,
+    );
 
     return await this.usersRepository.update(id, {
       group: updateUserDto.group,

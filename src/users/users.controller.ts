@@ -10,7 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, CreateUserStudentDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserStudentDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -19,13 +19,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserStudentDto) {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createStudent(createUserDto);
   }
 
   @Get()
   findAll() {
-    return this.usersService.findAllStudents();
+    return this.usersService.findAll();
   }
 
   @Get(':id')
@@ -34,8 +34,8 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserStudentDto) {
-    return this.usersService.updateStudent(id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')

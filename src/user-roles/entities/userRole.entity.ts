@@ -7,7 +7,7 @@ export class UserRole {
   id: string;
 
   @Column()
-  role: 'student' | 'admin';
+  name: string;
 
   @OneToMany(() => User, (user) => user.role)
   users: User[];

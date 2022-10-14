@@ -27,7 +27,10 @@ export class Event {
   @Column()
   description: string;
 
-  @ManyToOne(() => User, (user) => user.events)
+  @ManyToOne(() => User, (user) => user.events, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   owner: User;
 
   @Column()
@@ -52,12 +55,14 @@ export class Event {
   @OneToMany(() => EventsImage, (images) => images.event, {
     eager: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   images: EventsImage[];
 
   @OneToMany(() => EventDay, (eventDay) => eventDay.event, {
     eager: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   days: EventDay[];
 
@@ -76,8 +81,9 @@ export class Event {
   peopleCame: User[];
 
   @OneToMany(() => EventReview, (review) => review.event, {
-    eager: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    eager: true,
   })
   reviews: EventReview[];
 

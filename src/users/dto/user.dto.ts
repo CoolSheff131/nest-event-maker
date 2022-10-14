@@ -1,6 +1,7 @@
 import { EventReview } from 'src/event-reviews/entities/event-review.entity';
 import { Event } from 'src/events/entities/event.entity';
 import { Group } from 'src/groups/entities/group.entity';
+import { UserRole } from 'src/user-roles/entities/userRole.entity';
 
 export class UserDto {
   id: string;
@@ -12,7 +13,7 @@ export class UserDto {
 
   avatarUrl: string;
 
-  role: 'student' | 'admin';
+  role: UserRole;
 
   group: Group;
 

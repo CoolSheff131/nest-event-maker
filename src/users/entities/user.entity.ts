@@ -30,16 +30,22 @@ export class User {
   @Column()
   avatarUrl: string;
 
-  @ManyToOne(() => UserRole, (userRole) => userRole.users)
+  @ManyToOne(() => UserRole, (userRole) => userRole.users, { eager: true })
   role: UserRole;
 
   @ManyToOne(() => Group, (group) => group.users)
   group: Group;
 
-  @OneToMany(() => Event, (event) => event.owner)
+  @OneToMany(() => Event, (event) => event.owner, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   events: Event[];
 
-  @OneToMany(() => EventReview, (eventReview) => eventReview.reviewer)
+  @OneToMany(() => EventReview, (eventReview) => eventReview.reviewer, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   reviews: EventReview[];
 
   @ManyToMany(() => Event, (event) => event.peopleWillCome)
