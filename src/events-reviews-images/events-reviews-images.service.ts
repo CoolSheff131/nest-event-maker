@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateEventsReviewsImageDto } from './dto/create-events-reviews-image.dto';
 import { UpdateEventsReviewsImageDto } from './dto/update-events-reviews-image.dto';
+import { EventsReviewsImage } from './entities/events-reviews-image.entity';
 
 @Injectable()
 export class EventsReviewsImagesService {
-  create(createEventsReviewsImageDto: CreateEventsReviewsImageDto) {
-    return 'This action adds a new eventsReviewsImage';
+  constructor(
+    @InjectRepository(EventsReviewsImage)
+    private readonly eventReviewImageRepository: Repository<EventsReviewsImage>,
+  ) {}
+
+  async create(createEventsReviewImageDto: Express.Multer.File) {
+    return await this.eventReviewImageRepository.save({
+      url: `http://localhost:3000/events/image/${createEventsReviewImageDto.filename}`,
+    });
   }
 
   findAll() {

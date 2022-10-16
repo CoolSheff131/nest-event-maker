@@ -13,8 +13,8 @@ export class EventReview {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @ManyToOne(() => User, (user) => user.reviews)
-  reviewer: User;
+  @Column()
+  rate: number;
 
   @Column()
   text: string;
@@ -27,4 +27,7 @@ export class EventReview {
 
   @ManyToOne(() => Event, (event) => event.reviews)
   event: Event;
+
+  @ManyToOne(() => User, (user) => user.reviews)
+  reviewer: User;
 }

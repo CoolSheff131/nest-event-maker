@@ -1,16 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { EventsReviewsImagesService } from './events-reviews-images.service';
 import { CreateEventsReviewsImageDto } from './dto/create-events-reviews-image.dto';
 import { UpdateEventsReviewsImageDto } from './dto/update-events-reviews-image.dto';
 
 @Controller('events-reviews-images')
 export class EventsReviewsImagesController {
-  constructor(private readonly eventsReviewsImagesService: EventsReviewsImagesService) {}
-
-  @Post()
-  create(@Body() createEventsReviewsImageDto: CreateEventsReviewsImageDto) {
-    return this.eventsReviewsImagesService.create(createEventsReviewsImageDto);
-  }
+  constructor(
+    private readonly eventsReviewsImagesService: EventsReviewsImagesService,
+  ) {}
 
   @Get()
   findAll() {
@@ -23,8 +28,14 @@ export class EventsReviewsImagesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventsReviewsImageDto: UpdateEventsReviewsImageDto) {
-    return this.eventsReviewsImagesService.update(+id, updateEventsReviewsImageDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateEventsReviewsImageDto: UpdateEventsReviewsImageDto,
+  ) {
+    return this.eventsReviewsImagesService.update(
+      +id,
+      updateEventsReviewsImageDto,
+    );
   }
 
   @Delete(':id')

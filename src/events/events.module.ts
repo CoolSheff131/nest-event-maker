@@ -19,5 +19,6 @@ import { EventTagsModule } from 'src/event-tags/event-tags.module';
   ],
   controllers: [EventsController],
   providers: [EventsService],
+  exports: [EventsService],
 })
 export class EventsModule {}

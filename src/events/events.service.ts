@@ -44,7 +44,7 @@ export class EventsService {
     return eventEntity;
   }
   async findUserEvents(userId: string) {
-    let events = await this.findAll();
+    let events = await this.findAllConvertImage();
     events = events.filter(
       (e) =>
         +e.owner.id === +userId ||
@@ -139,7 +139,7 @@ export class EventsService {
     return newEvent;
   }
 
-  async findAll() {
+  async findAllConvertImage() {
     const events = await this.eventRepository.find({
       relations: [
         'owner',
@@ -163,6 +163,10 @@ export class EventsService {
       );
   }
 
+  async findEntityOneById(id: string) {
+    const event = await this.eventRepository.findOneBy({ id });
+    return event;
+  }
   async findOne(id: string) {
     const event = await this.eventRepository.findOneBy({ id });
     return {

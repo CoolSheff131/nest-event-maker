@@ -8,5 +8,6 @@ import { EventsReviewsImage } from './entities/events-reviews-image.entity';
   imports: [TypeOrmModule.forFeature([EventsReviewsImage])],
   controllers: [EventsReviewsImagesController],
   providers: [EventsReviewsImagesService],
+  exports: [EventsReviewsImagesService],
 })
 export class EventsReviewsImagesModule {}
