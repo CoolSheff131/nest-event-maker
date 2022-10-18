@@ -55,7 +55,7 @@ export class EventsController {
 
   @Get()
   findAll() {
-    return this.eventsService.findAllConvertImage();
+    return this.eventsService.findAllAndConvertImage();
   }
 
   @Patch(':id/remove-confirm-present')

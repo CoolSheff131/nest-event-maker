@@ -7,6 +7,7 @@ import { EventTagsService } from 'src/event-tags/event-tags.service';
 import { EventsImage } from 'src/events-images/entities/events-image.entity';
 import { EventsImagesService } from 'src/events-images/events-images.service';
 import { UserDto } from 'src/users/dto/user.dto';
+import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateEventDTO } from './dto/create-event.dto';
@@ -44,7 +45,7 @@ export class EventsService {
     return eventEntity;
   }
   async findUserEvents(userId: string) {
-    let events = await this.findAllConvertImage();
+    let events = await this.findAllAndConvertImage();
     events = events.filter(
       (e) =>
         +e.owner.id === +userId ||
@@ -101,12 +102,14 @@ export class EventsService {
   ) {
     const dto: CreateEventDTO = {
       days: JSON.parse(createEventDto.days),
-      description: createEventDto.description,
+      description: JSON.parse(createEventDto.description),
       groups: JSON.parse(createEventDto.groups),
-      places: +createEventDto.places,
+      places: +JSON.parse(createEventDto.places),
       tags: JSON.parse(createEventDto.tags),
-      title: createEventDto.title,
+      title: JSON.parse(createEventDto.title),
       owner: JSON.parse(createEventDto.owner),
+      peopleCame: JSON.parse(createEventDto.peopleCame),
+      peopleWillCome: JSON.parse(createEventDto.peopleWillCome),
     };
     const imageEntities: EventsImage[] = [];
     for (let image of images) {
@@ -115,11 +118,23 @@ export class EventsService {
       imageEntities.push(imageEntity);
     }
     const dayEntities: EventDay[] = [];
-
     for (let day of dto.days) {
       const dayEntity = await this.eventDayService.create(day);
-
       dayEntities.push(dayEntity);
+    }
+    const peopleCameEntities: User[] = [];
+    for (let personCame of dto.peopleCame) {
+      const personCameEntity = await this.userService.findOneByLogin(
+        personCame.login,
+      );
+      peopleCameEntities.push(personCameEntity);
+    }
+    const peopleWillComeEntities: User[] = [];
+    for (let personWillCome of dto.peopleWillCome) {
+      const personWillComeEntity = await this.userService.findOneByLogin(
+        personWillCome.login,
+      );
+      peopleWillComeEntities.push(personWillComeEntity);
     }
 
     const owner = await this.userService.findOneById(dto.owner.id);
@@ -134,12 +149,14 @@ export class EventsService {
       title: dto.title,
       days: dayEntities,
       groups: dto.groups,
+      peopleCame: peopleCameEntities,
+      peopleWillCome: peopleWillComeEntities,
     });
     await this.eventRepository.save(newEvent);
     return newEvent;
   }
 
-  async findAllConvertImage() {
+  async findAllAndConvertImage() {
     const events = await this.eventRepository.find({
       relations: [
         'owner',
@@ -182,14 +199,19 @@ export class EventsService {
   ) {
     const dto: CreateEventDTO = {
       days: JSON.parse(createEventDto.days),
-      description: createEventDto.description,
+      description: JSON.parse(createEventDto.description),
       groups: JSON.parse(createEventDto.groups),
-      places: +createEventDto.places,
-      title: createEventDto.title,
+      places: +JSON.parse(createEventDto.places),
+      title: JSON.parse(createEventDto.title),
       owner: JSON.parse(createEventDto.owner),
 
       tags: JSON.parse(createEventDto.tags),
+
+      peopleCame: JSON.parse(createEventDto.peopleCame),
+      peopleWillCome: JSON.parse(createEventDto.peopleWillCome),
     };
+
+    console.log(dto);
 
     const newImageEntities: EventsImage[] = [];
     for (let image of images) {
@@ -213,6 +235,22 @@ export class EventsService {
 
     const event = await this.eventRepository.findOneBy({ id });
 
+    const peopleCameEntities: User[] = [];
+    for (let personCame of dto.peopleCame) {
+      const personCameEntity = await this.userService.findOneByLogin(
+        personCame.login,
+      );
+
+      peopleCameEntities.push(personCameEntity);
+    }
+    const peopleWillComeEntities: User[] = [];
+    for (let personWillCome of dto.peopleWillCome) {
+      const personWillComeEntity = await this.userService.findOneByLogin(
+        personWillCome.login,
+      );
+      peopleWillComeEntities.push(personWillComeEntity);
+    }
+
     event.owner = owner;
     (event.places = dto.places), (event.tags = tagsEntities);
 
@@ -221,7 +259,9 @@ export class EventsService {
     event.title = dto.title;
     event.days = dayEntities;
     event.groups = dto.groups;
-    this.eventRepository.save(event);
+    event.peopleCame = peopleCameEntities;
+    event.peopleWillCome = peopleWillComeEntities;
+    await this.eventRepository.save(event);
     return event;
   }
 
