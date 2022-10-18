@@ -24,7 +24,7 @@ export class EventReviewsService {
     createEventReviewDto: any, //TODO formData type
   ) {
     const dto: CreateEventReviewDto = {
-      event: JSON.parse(createEventReviewDto.rate),
+      event: JSON.parse(createEventReviewDto.event),
       rate: JSON.parse(createEventReviewDto.rate),
       text: createEventReviewDto.text,
       reviewer: JSON.parse(createEventReviewDto.reviewer),

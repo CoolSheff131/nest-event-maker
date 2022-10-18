@@ -28,6 +28,6 @@ export class EventReview {
   @ManyToOne(() => Event, (event) => event.reviews)
   event: Event;
 
-  @ManyToOne(() => User, (user) => user.reviews)
+  @ManyToOne(() => User, (user) => user.reviews, { eager: true })
   reviewer: User;
 }
