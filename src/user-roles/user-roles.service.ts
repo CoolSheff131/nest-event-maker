@@ -25,7 +25,7 @@ export class UserRolesService {
     return userRole;
   }
   remove(id: string) {
-    throw new Error('Method not implemented.');
+    return this.userRolesRepository.delete({ id });
   }
   async findAll() {
     return await this.userRolesRepository.find();
