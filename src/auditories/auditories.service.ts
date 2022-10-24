@@ -14,7 +14,7 @@ export class AuditoriesService {
 
   async create(createAuditoryDto: CreateAuditoryDto) {
     const createdAuditory = await this.auditoryRepository.save({
-      name: createAuditoryDto.auditoryName,
+      name: createAuditoryDto.name,
     });
     return createdAuditory;
   }
@@ -28,10 +28,10 @@ export class AuditoriesService {
   }
 
   update(id: number, updateAuditoryDto: UpdateAuditoryDto) {
-    return `This action updates a #${id} auditory`;
+    return this.auditoryRepository.update(id, { name: updateAuditoryDto.name });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} auditory`;
+    return this.auditoryRepository.delete(id);
   }
 }

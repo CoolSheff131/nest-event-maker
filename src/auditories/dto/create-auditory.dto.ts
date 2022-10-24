@@ -1,3 +1,3 @@
 export class CreateAuditoryDto {
-  auditoryName: string;
+  name: string;
 }
