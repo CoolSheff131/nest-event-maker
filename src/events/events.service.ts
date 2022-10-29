@@ -123,18 +123,22 @@ export class EventsService {
       dayEntities.push(dayEntity);
     }
     const peopleCameEntities: User[] = [];
-    for (let personCame of dto.peopleCame) {
-      const personCameEntity = await this.userService.findOneByLogin(
-        personCame.login,
-      );
-      peopleCameEntities.push(personCameEntity);
+    if (dto.peopleCame) {
+      for (let personCame of dto.peopleCame) {
+        const personCameEntity = await this.userService.findOneByLogin(
+          personCame.login,
+        );
+        peopleCameEntities.push(personCameEntity);
+      }
     }
     const peopleWillComeEntities: User[] = [];
-    for (let personWillCome of dto.peopleWillCome) {
-      const personWillComeEntity = await this.userService.findOneByLogin(
-        personWillCome.login,
-      );
-      peopleWillComeEntities.push(personWillComeEntity);
+    if (dto.peopleWillCome) {
+      for (let personWillCome of dto.peopleWillCome) {
+        const personWillComeEntity = await this.userService.findOneByLogin(
+          personWillCome.login,
+        );
+        peopleWillComeEntities.push(personWillComeEntity);
+      }
     }
 
     const owner = await this.userService.findOneById(dto.owner.id);

@@ -14,6 +14,6 @@ export interface CreateEventDTO {
   groups: Group[];
   tags: EventTag[];
   days: CreateEventDayDto[];
-  peopleCame: CreateUserDto[];
-  peopleWillCome: CreateUserDto[];
+  peopleCame?: CreateUserDto[];
+  peopleWillCome?: CreateUserDto[];
 }
